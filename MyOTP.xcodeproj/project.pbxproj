@@ -7,20 +7,24 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D79964A925D45F9E0008350D /* EditTokenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D79964A825D45F9E0008350D /* EditTokenView.swift */; };
+		D7BF48FC25D1BB4A0088993E /* Tokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7BF48FB25D1BB4A0088993E /* Tokens.swift */; };
+		D7D2137625D0111F0067A44D /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7D2137525D0111F0067A44D /* main.swift */; };
 		D7EE0C3925CD62B2009F3C3F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7EE0C3825CD62B2009F3C3F /* AppDelegate.swift */; };
-		D7EE0C3B25CD62B2009F3C3F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7EE0C3A25CD62B2009F3C3F /* ContentView.swift */; };
+		D7EE0C3B25CD62B2009F3C3F /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7EE0C3A25CD62B2009F3C3F /* MainView.swift */; };
 		D7EE0C3D25CD62B3009F3C3F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D7EE0C3C25CD62B3009F3C3F /* Assets.xcassets */; };
 		D7EE0C4025CD62B3009F3C3F /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D7EE0C3F25CD62B3009F3C3F /* Preview Assets.xcassets */; };
-		D7EE0C4325CD62B3009F3C3F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D7EE0C4125CD62B3009F3C3F /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D79964A825D45F9E0008350D /* EditTokenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTokenView.swift; sourceTree = "<group>"; };
+		D7BF48FB25D1BB4A0088993E /* Tokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tokens.swift; sourceTree = "<group>"; };
+		D7D2137525D0111F0067A44D /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		D7EE0C3525CD62B2009F3C3F /* MyOTP.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyOTP.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D7EE0C3825CD62B2009F3C3F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		D7EE0C3A25CD62B2009F3C3F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		D7EE0C3A25CD62B2009F3C3F /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		D7EE0C3C25CD62B3009F3C3F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D7EE0C3F25CD62B3009F3C3F /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		D7EE0C4225CD62B3009F3C3F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D7EE0C4425CD62B3009F3C3F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D7EE0C4525CD62B3009F3C3F /* MyOTP.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MyOTP.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -56,9 +60,11 @@
 			isa = PBXGroup;
 			children = (
 				D7EE0C3825CD62B2009F3C3F /* AppDelegate.swift */,
-				D7EE0C3A25CD62B2009F3C3F /* ContentView.swift */,
+				D7EE0C3A25CD62B2009F3C3F /* MainView.swift */,
+				D79964A825D45F9E0008350D /* EditTokenView.swift */,
+				D7BF48FB25D1BB4A0088993E /* Tokens.swift */,
 				D7EE0C3C25CD62B3009F3C3F /* Assets.xcassets */,
-				D7EE0C4125CD62B3009F3C3F /* Main.storyboard */,
+				D7D2137525D0111F0067A44D /* main.swift */,
 				D7EE0C4425CD62B3009F3C3F /* Info.plist */,
 				D7EE0C4525CD62B3009F3C3F /* MyOTP.entitlements */,
 				D7EE0C3E25CD62B3009F3C3F /* Preview Content */,
@@ -101,7 +107,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1240;
-				LastUpgradeCheck = 1240;
+				LastUpgradeCheck = 1250;
 				TargetAttributes = {
 					D7EE0C3425CD62B2009F3C3F = {
 						CreatedOnToolsVersion = 12.4;
@@ -131,7 +137,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D7EE0C4325CD62B3009F3C3F /* Main.storyboard in Resources */,
 				D7EE0C4025CD62B3009F3C3F /* Preview Assets.xcassets in Resources */,
 				D7EE0C3D25CD62B3009F3C3F /* Assets.xcassets in Resources */,
 			);
@@ -144,23 +149,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D7EE0C3B25CD62B2009F3C3F /* ContentView.swift in Sources */,
+				D7D2137625D0111F0067A44D /* main.swift in Sources */,
+				D79964A925D45F9E0008350D /* EditTokenView.swift in Sources */,
+				D7EE0C3B25CD62B2009F3C3F /* MainView.swift in Sources */,
 				D7EE0C3925CD62B2009F3C3F /* AppDelegate.swift in Sources */,
+				D7BF48FC25D1BB4A0088993E /* Tokens.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXVariantGroup section */
-		D7EE0C4125CD62B3009F3C3F /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				D7EE0C4225CD62B3009F3C3F /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		D7EE0C4625CD62B3009F3C3F /* Debug */ = {
@@ -214,7 +211,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 11.1;
+				MACOSX_DEPLOYMENT_TARGET = 11.3;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -269,7 +266,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 11.1;
+				MACOSX_DEPLOYMENT_TARGET = 11.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
@@ -284,6 +281,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = MyOTP/MyOTP.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"MyOTP/Preview Content\"";
@@ -295,7 +293,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MACOSX_DEPLOYMENT_TARGET = 11.3;
 				PRODUCT_BUNDLE_IDENTIFIER = home.cloud.MyOTP;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -308,6 +306,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = MyOTP/MyOTP.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"MyOTP/Preview Content\"";
@@ -319,7 +318,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MACOSX_DEPLOYMENT_TARGET = 11.3;
 				PRODUCT_BUNDLE_IDENTIFIER = home.cloud.MyOTP;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -336,7 +335,7 @@
 				D7EE0C4725CD62B3009F3C3F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		D7EE0C4825CD62B3009F3C3F /* Build configuration list for PBXNativeTarget "MyOTP" */ = {
 			isa = XCConfigurationList;
@@ -345,7 +344,7 @@
 				D7EE0C4A25CD62B3009F3C3F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};
