@@ -46,7 +46,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSDragging
         statusBarItem.button?.window?.registerForDraggedTypes([NSPasteboard.PasteboardType.URL, NSPasteboard.PasteboardType.fileURL])
         statusBarItem.button?.window?.delegate = self;
 //        statusBarItem.button?.window?.backgroundColor = NSColor.red
-        
+
         mainWindow = NSWindow()
         mainWindow.styleMask = [ .borderless ]
         mainWindow.level = .floating

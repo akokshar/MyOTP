@@ -11,8 +11,9 @@ struct MainView: View {
     @EnvironmentObject var tokens: Tokens
 
     private let cornerRadius: CGFloat = 8
+
     @State private var timer: Timer? = nil
-//    @State private var currentTime: Int64 = Int64(Date().timeIntervalSince1970)
+    @State private var currentTime: Int64 = Int64(Date().timeIntervalSince1970)
 
     @State private var changedTokenId: UUID?
 
@@ -141,7 +142,7 @@ struct MainView: View {
                 .strokeBorder(Color.gray, lineWidth: 0.29 )
                 .blur(radius: 0.25 )
         )
-        .frame(minWidth: 300, idealWidth: 350, maxWidth: .infinity, minHeight: 264, idealHeight: 264 ,  maxHeight: .infinity, alignment: .leading)
+        .frame(minWidth: 300, idealWidth: 350, maxWidth: .infinity, minHeight: 295, idealHeight: 295 ,  maxHeight: .infinity, alignment: .leading)
         .sheet(
             isPresented: showEditor,
             content: {
@@ -163,7 +164,7 @@ struct MainView: View {
                 }
                 .onDisappear() {
                     (NSApplication.shared.delegate as! AppDelegate).keepWindowOnTop(false)
-                    tokens.refreshAge()
+                    tokens.touch()
                     start()
                 }
 //                }
@@ -179,7 +180,7 @@ struct MainView: View {
             pause()
         }
         .onAppear {
-            tokens.refreshAge()
+            tokens.touch()
             start()
         }
     }
@@ -187,8 +188,8 @@ struct MainView: View {
     func start() {
 //        print("Start")
         self.timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true){ _ in
-            tokens.refreshAge()
-//            self.currentTime = Int64(Date().timeIntervalSince1970)
+            tokens.touch()
+            currentTime = Int64(Date().timeIntervalSince1970)
 //            print(self.currentTime)
         }
     }
@@ -252,8 +253,10 @@ struct TokenView: View {
                             .allowsTightening(true)
 //                            .multilineTextAlignment(.leading)
                             .truncationMode(.middle)
-                        ProgressView(value: token.tokenData.age)
-                            .frame(height: 1)
+//                        HStack {
+                        ProgressView(value: token.tokenAge())
+                            .frame(height: 5)
+//                        }
                     }
                 }
             )
@@ -336,30 +339,11 @@ struct CommandButtonStyle: ButtonStyle {
         configuration.label
             .scaleEffect(configuration.isPressed ? 0.9 : 1)
             .foregroundColor(isHovering ? hoverColor : color)
-//            .overlay(AcceptingFirstMouse())
             .onHover { hovering in
                 self.isHovering = hovering
             }
     }
 }
-
-//class FirstMouseView : NSView {
-//    override func acceptsFirstMouse(for event: NSEvent?) -> Bool {
-//        return true
-//    }
-//}
-//
-//struct AcceptingFirstMouse : NSViewRepresentable {
-//    func makeNSView(context: NSViewRepresentableContext<AcceptingFirstMouse>) -> FirstMouseView {
-//        return FirstMouseView()
-//    }
-//
-//    func updateNSView(_ nsView: FirstMouseView, context: NSViewRepresentableContext<AcceptingFirstMouse>) {
-//        nsView.setNeedsDisplay(nsView.bounds)
-//    }
-//
-//    typealias NSViewType = FirstMouseView
-//}
 
 struct MainView_Previews: PreviewProvider {
     static var previews: some View {
@@ -370,6 +354,12 @@ struct MainView_Previews: PreviewProvider {
                 Token("iCloud @ Personal", "myself@icloud.com")
             ]))
             .previewLayout(.sizeThatFits)
-            .frame(width: 350, height: 260, alignment: .center)
+            .frame(width: 350, height: 295, alignment: .center)
+    }
+}
+
+struct TokenView_Previews: PreviewProvider {
+    static var previews: some View {
+        TokenView(token: Token("Issuer", "Account"))
     }
 }

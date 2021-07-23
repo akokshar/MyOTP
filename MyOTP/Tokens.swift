@@ -35,7 +35,7 @@ struct TokenData: Codable {
     var startTime: Int = 0
     var period: Int = 30
     var digits: Int = 6
-    var age: Float = 0.0
+    var refresh: Int = 0 // used to trigger ui refresh
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -264,8 +264,12 @@ class Token: Identifiable, ObservableObject {
         return String(format: "%0\(tokenData.digits)d",  token)
     }
 
-    func refreshAge() {
-        tokenData.age = Float(Int(Date().timeIntervalSince1970 - Double(tokenData.startTime)) % tokenData.period) / Float(tokenData.period)
+    func touch() {
+        tokenData.refresh += 1
+    }
+
+    func tokenAge() -> Float {
+        return Float(Int(Date().timeIntervalSince1970 - Double(tokenData.startTime)) % tokenData.period) / Float(tokenData.period)
     }
 }
 
@@ -348,7 +352,7 @@ class Tokens: ObservableObject {
             }
             items.append(token)
         }
-        refreshAge()
+        touch()
     }
 
     init(_ items: [Token]) {
@@ -408,7 +412,7 @@ class Tokens: ObservableObject {
             }
             throw TokenError.KeychainError("Error: \(status)")
         }
-        token.refreshAge()
+        token.touch()
     }
 
     func deleteToken(_ token: Token) {
@@ -432,9 +436,9 @@ class Tokens: ObservableObject {
         }
     }
 
-    func refreshAge() {
+    func touch() {
         items.forEach { token in
-            token.refreshAge()
+            token.touch()
         }
     }
 }
