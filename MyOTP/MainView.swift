@@ -11,6 +11,7 @@ struct MainView: View {
     @EnvironmentObject var tokens: Tokens
 
     private let cornerRadius: CGFloat = 8
+    private let tokenButtonHeight: CGFloat = 64
 
     @State private var timer: Timer? = nil
     @State private var currentTime: Int64 = Int64(Date().timeIntervalSince1970)
@@ -110,7 +111,7 @@ struct MainView: View {
                                 (NSApplication.shared.delegate as! AppDelegate).hideMainWindow()
                             }
                         )
-                        .frame(height: 64)
+                        .frame(height: tokenButtonHeight)
                     }
 //                    .onDelete { <#IndexSet#> in
 //                        print("YAY")
@@ -146,7 +147,11 @@ struct MainView: View {
                 .strokeBorder(Color.gray, lineWidth: 0.29 )
                 .blur(radius: 0.25 )
         )
-        .frame(minWidth: 300, idealWidth: 350, maxWidth: .infinity, minHeight: 280, idealHeight: 280 ,  maxHeight: .infinity, alignment: .leading)
+        .frame(
+            minWidth: 300, idealWidth: 350, maxWidth: .infinity,
+            minHeight: 278, idealHeight: 278 ,  maxHeight: .infinity,
+            alignment: .leading
+        )
         .sheet(
             isPresented: showEditor,
             content: {
@@ -361,7 +366,7 @@ struct MainView_Previews: PreviewProvider {
                 Token("iCloud @ Personal", "myself@icloud.com")
             ]))
             .previewLayout(.sizeThatFits)
-            .frame(width: 350, height: 280, alignment: .center)
+            .frame(width: 350, height: 278, alignment: .center)
     }
 }
 

@@ -15,7 +15,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSDragging
     private var statusBarItem: NSStatusItem!
     private var observation : NSKeyValueObservation?
     private var localMonitor: Any?
-    private var globalMonitor: Any?
+//    private var globalMonitor: Any?
 //    private var dragMonitor: Any?
     private var mainWindow: NSWindow!
     private var keepOnTop: Bool = false
@@ -55,10 +55,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSDragging
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
-//        if let monitor = localMonitor {
-//            NSEvent.removeMonitor(monitor)
-//            localMonitor = nil
-//        }
+        if let monitor = localMonitor {
+            NSEvent.removeMonitor(monitor)
+            localMonitor = nil
+        }
 
         hideMainWindow()
     }
@@ -149,10 +149,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSDragging
         if keepOnTop {
             return
         }
-        if let monitor = globalMonitor {
-            NSEvent.removeMonitor(monitor)
-            globalMonitor = nil
-        }
+//        if let monitor = globalMonitor {
+//            NSEvent.removeMonitor(monitor)
+//            globalMonitor = nil
+//        }
         NSApp.deactivate()
 
         mainWindow.contentView = nil

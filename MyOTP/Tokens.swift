@@ -441,4 +441,8 @@ class Tokens: ObservableObject {
             token.touch()
         }
     }
+
+    func count() -> Int {
+        return items.count
+    }
 }
