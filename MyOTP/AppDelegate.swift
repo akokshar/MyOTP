@@ -9,11 +9,13 @@ import Cocoa
 import SwiftUI
 import UniformTypeIdentifiers.UTType
 
-class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSDraggingDestination {
+class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSDraggingDestination, NSMenuDelegate {
     private let tokens: Tokens = Tokens()
 
     private var statusBarItem: NSStatusItem!
-//    private var monitor: Any?
+    private var observation : NSKeyValueObservation?
+    private var localMonitor: Any?
+    private var globalMonitor: Any?
 //    private var dragMonitor: Any?
     private var mainWindow: NSWindow!
     private var keepOnTop: Bool = false
@@ -28,24 +30,21 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSDragging
             return representation.draw(in: rect)
         }
 
-//        let statusBarMenu = NSMenu(title: "MyOTP")
-//        statusBarItem.menu = statusBarMenu
-//
-//        let menuItem = NSMenuItem()
-//        menuItem.view = NSHostingView(
-//            rootView: MainView()
-//                .environmentObject(Tokens())
-//        )
-//        menuItem.view?.setFrameSize(NSSize(width: 200, height: 400))
-//        statusBarMenu.addItem(menuItem)
-//
-//        return
+//        statusBarItem.button?.action = #selector(AppDelegate.toggleMainWindow(_:))
+//        statusBarItem.button?.sendAction(on: .leftMouseDown)
+        localMonitor = NSEvent.addLocalMonitorForEvents(matching: [.leftMouseDown, .rightMouseDown]) { event in
+            if event.window == self.statusBarItem.button?.window {
+                self.toggleMainWindow(self.statusBarItem.button)
+                return nil
+            }
+            return event
+        }
+//        observation = statusBarItem.observe(\.button?.isHighlighted, options: [.new, .old]) { _, change in
+//            print("\(change.oldValue.debugDescription) -> \(change.newValue.debugDescription)")
+//        }
 
-        statusBarItem.button?.action = #selector(AppDelegate.toggleMainWindow(_:))
-        statusBarItem.button?.sendAction(on: .leftMouseDown)
         statusBarItem.button?.window?.registerForDraggedTypes([NSPasteboard.PasteboardType.URL, NSPasteboard.PasteboardType.fileURL])
         statusBarItem.button?.window?.delegate = self;
-//        statusBarItem.button?.window?.backgroundColor = NSColor.red
 
         mainWindow = NSWindow()
         mainWindow.styleMask = [ .borderless ]
@@ -53,52 +52,45 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSDragging
         mainWindow.backgroundColor = .clear
         mainWindow.isOpaque = true
         mainWindow.isReleasedWhenClosed = false
-// // //        mainWindow.hidesOnDeactivate = true
-//        mainWindow.contentView = NSHostingView(
-//            rootView: MainView()
-//                .environmentObject(tokens)
-//        )
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
-//        if let monitor = dragMonitor {
+//        if let monitor = localMonitor {
 //            NSEvent.removeMonitor(monitor)
-//            dragMonitor = nil
+//            localMonitor = nil
 //        }
-    }
 
-    func applicationWillHide(_ notification: Notification) {
-        print("HIDE")
+        hideMainWindow()
     }
 
     func applicationDidResignActive(_ notification: Notification) {
         hideMainWindow()
     }
 
-    func draggingEnded(_ sender: NSDraggingInfo) {
-        print("Ended")
-        guard let frame = statusBarItem.button?.window?.frame else {
-            return
-        }
-        guard sender.draggingLocation.x > 0 && sender.draggingLocation.x < frame.width else {
-            return
-        }
-        guard sender.draggingLocation.y > 0 && sender.draggingLocation.y < frame.height else {
-            return
-        }
+//    func draggingEnded(_ sender: NSDraggingInfo) {
+//        print("Ended")
+//        guard let frame = statusBarItem.button?.window?.frame else {
+//            return
+//        }
+//        guard sender.draggingLocation.x > 0 && sender.draggingLocation.x < frame.width else {
+//            return
+//        }
+//        guard sender.draggingLocation.y > 0 && sender.draggingLocation.y < frame.height else {
+//            return
+//        }
+//
+//        //tokens.saveToken(fromImage: nil)
+//        showMainWindow()
+//    }
 
-        //tokens.saveToken(fromImage: nil)
-        showMainWindow()
-    }
-
-    func draggingEntered(_ sender: NSDraggingInfo) -> NSDragOperation {
-        print("enter")
-        return NSDragOperation.copy
-    }
-
-    func draggingExited(_ sender: NSDraggingInfo?) {
-        print("exit")
-    }
+//    func draggingEntered(_ sender: NSDraggingInfo) -> NSDragOperation {
+//        print("enter")
+//        return NSDragOperation.copy
+//    }
+//
+//    func draggingExited(_ sender: NSDraggingInfo?) {
+//        print("exit")
+//    }
 
 //    func draggingUpdated(sender: NSDraggingInfo!) -> NSDragOperation  {
 //        print("UPDATED")
@@ -140,32 +132,36 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSDragging
         }
         mainWindow.setFrame(windowRect, display: true, animate: true)
 
-//        if monitor == nil {
-//            monitor = NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseDown, .rightMouseDown) { event in
-//                self.hideMainWindow()
+        NSApp.activate(ignoringOtherApps: true)
+        mainWindow.makeKeyAndOrderFront(nil)
+
+        statusBarItem.button?.isHighlighted = true
+//        if globalMonitor == nil {
+//            globalMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseDown, .rightMouseDown, .otherMouseDown]) { event in
+//                if event.window != self.statusBarItem.button?.window && event.window != self.mainWindow {
+//                    self.hideMainWindow()
+//                }
 //            }
 //        }
-
-        mainWindow.makeKeyAndOrderFront(mainWindow)
-        NSApplication.shared.activate(ignoringOtherApps: true)
     }
 
     open func hideMainWindow() {
         if keepOnTop {
             return
         }
-//        if let monitor = monitor {
-//            NSEvent.removeMonitor(monitor)
-//        monitor = nil
-//        }
-        NSApplication.shared.deactivate()
+        if let monitor = globalMonitor {
+            NSEvent.removeMonitor(monitor)
+            globalMonitor = nil
+        }
+        NSApp.deactivate()
+
         mainWindow.contentView = nil
         mainWindow.close()
+        statusBarItem.button?.isHighlighted = false
     }
 
     @objc func toggleMainWindow(_ sender: AnyObject?) {
-        if mainWindow != nil && mainWindow.isVisible {
-//        if mainWindow.isVisible {
+        if mainWindow.isVisible {
             hideMainWindow()
         } else {
             showMainWindow()

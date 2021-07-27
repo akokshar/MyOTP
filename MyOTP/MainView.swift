@@ -17,6 +17,8 @@ struct MainView: View {
 
     @State private var changedTokenId: UUID?
 
+//    @State private var isHovering = false
+
     @State private var alertMessage: String = ""
     private var showAlert: Binding<Bool> {
         Binding(
@@ -60,7 +62,7 @@ struct MainView: View {
                     },
                     label: {
                         Image(systemName: "plus.circle.fill")
-                            .font(.headline)
+//                            .font(.headline)
                     }
                 )
                 .buttonStyle(CommandButtonStyle(color: .green))
@@ -108,6 +110,7 @@ struct MainView: View {
                                 (NSApplication.shared.delegate as! AppDelegate).hideMainWindow()
                             }
                         )
+                        .frame(height: 64)
                     }
 //                    .onDelete { <#IndexSet#> in
 //                        print("YAY")
@@ -121,6 +124,7 @@ struct MainView: View {
                 }
 //                .listStyle(SidebarListStyle())
 //                .listStyle(InsetListStyle())
+                .listStyle(PlainListStyle())
                 .onChange(of: changedTokenId) { target in
                     if let target = target {
 //                        changedTokenId = nil
@@ -142,7 +146,7 @@ struct MainView: View {
                 .strokeBorder(Color.gray, lineWidth: 0.29 )
                 .blur(radius: 0.25 )
         )
-        .frame(minWidth: 300, idealWidth: 350, maxWidth: .infinity, minHeight: 295, idealHeight: 295 ,  maxHeight: .infinity, alignment: .leading)
+        .frame(minWidth: 300, idealWidth: 350, maxWidth: .infinity, minHeight: 280, idealHeight: 280 ,  maxHeight: .infinity, alignment: .leading)
         .sheet(
             isPresented: showEditor,
             content: {
@@ -183,6 +187,11 @@ struct MainView: View {
             tokens.touch()
             start()
         }
+//        .onHover { hovering in
+//            if !hovering {
+//                (NSApplication.shared.delegate as! AppDelegate).hideMainWindow()
+//            }
+//        }
     }
 
     func start() {
@@ -214,6 +223,8 @@ struct TokenView: View {
     private let onDelete: () -> Void
     private let onPick: () -> Void
 
+    @State var offset = CGSize.zero
+
     init(token: Token, onEdit: @escaping ()->Void = {}, onDelete:  @escaping ()->Void = {}, onPick: @escaping ()->Void = {}) {
         self.onEdit = onEdit
         self.onDelete = onDelete
@@ -222,81 +233,77 @@ struct TokenView: View {
     }
 
     var body: some View {
-        HStack(alignment: .center, spacing: spacing) {
-            if (self.isDeleting) {
-                VStack(alignment: .center, spacing: 10) {
-                    Button(
-                        action:{
-                            onDelete()
-                        },
-                        label: {
-                            Image(systemName: "checkmark")
-                        }
-                    )
-                    .buttonStyle(CommandButtonStyle(color: .blue))
-                }
-                .padding(.leading, spacing)
-            }
-            Button(
-                action: {
-                    self.isHovering = false
-                    self.isDeleting = false
-                    onPick()
-                },
-                label: {
-                    VStack(alignment: .leading) {
-                        Text(token.tokenData.issuer)
-                            .font(.headline)
-                            .foregroundColor(.primary)
-                        Text(token.tokenData.account)
-                            .font(.footnote)
-                            .allowsTightening(true)
-//                            .multilineTextAlignment(.leading)
-                            .truncationMode(.middle)
-//                        HStack {
-                        ProgressView(value: token.tokenAge())
-                            .frame(height: 5)
-//                        }
+        GeometryReader { geometry in
+            HStack(alignment: .center, spacing: spacing) {
+                if (self.isDeleting) {
+                    VStack(alignment: .center, spacing: 10) {
+                        Button(
+                            action:{
+                                onDelete()
+                            },
+                            label: {
+                                Image(systemName: "checkmark")
+                            }
+                        )
+                        .buttonStyle(CommandButtonStyle(color: .blue))
                     }
+                    .padding(.leading, spacing)
                 }
-            )
-            .buttonStyle(TokenButtonStyle())
-            if (self.isHovering && !self.isDeleting) {
-                VStack(alignment: .center, spacing: 10) {
-                    Button(
-                        action:{
-                            onEdit()
-                        },
-                        label: {
-                            Image(systemName: "highlighter")
+                Button(
+                    action: {
+                        self.isHovering = false
+                        self.isDeleting = false
+                        onPick()
+                    },
+                    label: {
+                        VStack(alignment: .leading) {
+                            Text(token.tokenData.issuer)
+                                .font(.headline)
+                                .foregroundColor(.primary)
+                            Text(token.tokenData.account)
+                                .font(.footnote)
+                                .allowsTightening(true)
+    //                            .multilineTextAlignment(.leading)
+                                .truncationMode(.middle)
+    //                        HStack {
+                            ProgressView(value: token.tokenAge())
+                                .frame(height: 5)
+    //                        }
                         }
-                    )
-                    .buttonStyle(CommandButtonStyle(color: .green))
-                    Button(
-                        action:{
-                            self.isDeleting = true
-                        },
-                        label: {
-                            Image(systemName: "trash")
-                        }
-                    )
-                    .buttonStyle(CommandButtonStyle(color: .red))
+                    }
+                )
+                .buttonStyle(TokenButtonStyle())
+                if (self.isHovering && !self.isDeleting) {
+                    VStack(alignment: .center, spacing: 10) {
+                        Button(
+                            action:{
+                                onEdit()
+                            },
+                            label: {
+                                Image(systemName: "highlighter")
+                            }
+                        )
+                        .buttonStyle(CommandButtonStyle(color: .green))
+                        Button(
+                            action:{
+                                self.isDeleting = true
+                            },
+                            label: {
+                                Image(systemName: "trash")
+                            }
+                        )
+                        .buttonStyle(CommandButtonStyle(color: .red))
+                    }
+                    .padding(.trailing, spacing)
                 }
-                .padding(.trailing, spacing)
             }
+            .onHover { hovering in
+                self.isHovering = hovering
+                self.isDeleting = false
+            }
+            .animation(.easeInOut(duration: 0.2))
+            .frame(width: geometry.size.width, height: geometry.size.height)
         }
-        .onHover { hovering in
-            self.isHovering = hovering
-            self.isDeleting = false
-        }
-//        .background(
-//            Rectangle()
-//                .fill(Color.clear)
-//                .opacity(0.7)
-//        )
-//        .background(Color.clear)
-//        .opacity(1)
-        .frame(height: 64)
     }
 }
 
@@ -354,12 +361,13 @@ struct MainView_Previews: PreviewProvider {
                 Token("iCloud @ Personal", "myself@icloud.com")
             ]))
             .previewLayout(.sizeThatFits)
-            .frame(width: 350, height: 295, alignment: .center)
+            .frame(width: 350, height: 280, alignment: .center)
     }
 }
 
 struct TokenView_Previews: PreviewProvider {
     static var previews: some View {
         TokenView(token: Token("Issuer", "Account"))
+            .frame(width: 300, height: 64)
     }
 }
