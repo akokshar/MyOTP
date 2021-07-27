@@ -11,7 +11,8 @@ struct MainView: View {
     @EnvironmentObject var tokens: Tokens
 
     private let cornerRadius: CGFloat = 8
-    private let tokenButtonHeight: CGFloat = 64
+    private let headerHeight: CGFloat = 40
+    private let tokenButtonHeight: CGFloat = 70
 
     @State private var timer: Timer? = nil
     @State private var currentTime: Int64 = Int64(Date().timeIntervalSince1970)
@@ -81,7 +82,7 @@ struct MainView: View {
             }
             .padding([.top], cornerRadius)
             .padding([.leading, .trailing], 10)
-            .frame(height: 40, alignment: .center)
+            .frame(height: headerHeight, alignment: .center)
 
             // Tokens list
 
@@ -149,7 +150,7 @@ struct MainView: View {
         )
         .frame(
             minWidth: 300, idealWidth: 350, maxWidth: .infinity,
-            minHeight: 278, idealHeight: 278 ,  maxHeight: .infinity,
+            minHeight: 298, idealHeight: 298, maxHeight: .infinity,
             alignment: .leading
         )
         .sheet(
@@ -270,10 +271,12 @@ struct TokenView: View {
                                 .allowsTightening(true)
     //                            .multilineTextAlignment(.leading)
                                 .truncationMode(.middle)
-    //                        HStack {
+//                            HStack {
                             ProgressView(value: token.tokenAge())
-                                .frame(height: 5)
-    //                        }
+                                .frame(minHeight: 5, idealHeight: 8, maxHeight: 8)
+//                                .scaledToFill()
+//                                .frame(height: 8)
+//                            }
                         }
                     }
                 )
@@ -322,7 +325,7 @@ struct TokenButtonStyle: ButtonStyle {
             configuration.label
                 .padding(10)
         }
-        .scaleEffect(configuration.isPressed ? 0.95 : 1)
+//        .scaleEffect(configuration.isPressed ? 0.95 : 1)
         .overlay(
             RoundedRectangle(cornerRadius: 8, style: .continuous)
                 .strokeBorder(isHovering ? Color.primary : Color.secondary, lineWidth: 0.27)
@@ -331,7 +334,7 @@ struct TokenButtonStyle: ButtonStyle {
         .background(
             RoundedRectangle(cornerRadius: 8)
                 .fill(backgroundColor)
-                .opacity(0.9)
+                .opacity(configuration.isPressed ? 0 : 0.9)
         )
         .shadow(color: backgroundColor, radius: 3)
         .frame(alignment: .leading)
@@ -366,13 +369,13 @@ struct MainView_Previews: PreviewProvider {
                 Token("iCloud @ Personal", "myself@icloud.com")
             ]))
             .previewLayout(.sizeThatFits)
-            .frame(width: 350, height: 278, alignment: .center)
+            .frame(width: 350, height: 298, alignment: .center)
     }
 }
 
 struct TokenView_Previews: PreviewProvider {
     static var previews: some View {
         TokenView(token: Token("Issuer", "Account"))
-            .frame(width: 300, height: 64)
+            .frame(width: 300, height: 82)
     }
 }

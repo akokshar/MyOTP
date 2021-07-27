@@ -60,8 +60,7 @@ struct TokenData: Codable {
 class Token: Identifiable, ObservableObject {
 
     @Published var tokenData: TokenData
-//    @Published var state: String = ""
-    let persisted: Bool
+//    let persisted: Bool
 
     var id: UUID {
         return tokenData.id
@@ -72,8 +71,6 @@ class Token: Identifiable, ObservableObject {
             return nil
         }
         self.tokenData = tokenData
-        persisted = true
-//        state = tokenData.account
     }
 
     func serialize() -> Data? {
@@ -86,8 +83,6 @@ class Token: Identifiable, ObservableObject {
             issuer: name,
             account: account
         )
-        persisted = false
-//        state = "New token"
     }
 
     func loadFromQRCode(_ image: NSImage?) throws {
@@ -112,7 +107,7 @@ class Token: Identifiable, ObservableObject {
             throw TokenError.LoadQRCodeError("Cant parse decoded QR code")
         }
 
-        print(otpAuthUrl.debugDescription)
+//        print(otpAuthUrl.debugDescription)
 
         guard otpAuthUrl.scheme == "otpauth" else {
             throw TokenError.LoadQRCodeError("only 'otpauth' scheme is supported")
@@ -208,7 +203,7 @@ class Token: Identifiable, ObservableObject {
         return SecTransformExecute(transform, nil) as? Data
     }
 
-    private func with(key: Data, data: Data, handler: ([UInt8])->Void) {
+    private func withHMAC(key: Data, data: Data, handler: ([UInt8])->Void) {
         switch tokenData.algorithm {
         case .SHA1:
             var h =  HMAC<Insecure.SHA1>(key: SymmetricKey(data: key))
@@ -250,7 +245,7 @@ class Token: Identifiable, ObservableObject {
             Data(bytes)
         }
         var token: UInt32 = 0
-        with(key: keyData, data: tData) { (bytes) in
+        withHMAC(key: keyData, data: tData) { (bytes) in
             let offset = Int(bytes[bytes.count - 1] & 0xf)
             let value: UInt32 =
                 UInt32(bytes[offset] & 0x7f) << 24 |
