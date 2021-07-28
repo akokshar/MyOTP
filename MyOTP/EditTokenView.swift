@@ -14,6 +14,7 @@ struct EditTokenView: View {
 
     @State var selectedTab = 1
     @State var isTargeted = false
+    @State var isSecretVisible = false
 
     @State private var alertMessage: String = ""
     private var showAlert: Binding<Bool> {
@@ -90,8 +91,23 @@ struct EditTokenView: View {
                         .font(.callout)
                     TextField("Account name...", text: $token.tokenData.account)
                     Text("Secret:")
-                        .font(.callout)
-                    TextField("Secret...", text: $token.tokenData.secret)
+                            .font(.callout)
+                    HStack {
+                        if isSecretVisible {
+                            TextField("Secret...", text: $token.tokenData.secret)
+                        } else {
+                            SecureField("Secret...", text: $token.tokenData.secret)
+                        }
+                        Button(
+                            action: {
+                                isSecretVisible.toggle()
+                            },
+                            label: {
+                                Image(systemName: self.isSecretVisible ? "eye.slash" : "eye")
+//                                    .accentColor(.gray)
+                            }
+                        )
+                    }
                     HStack {
                         Picker("Algorithm:", selection: $token.tokenData.alg) {
                             Text("SHA1").tag(Algorithm.SHA1.rawValue)
