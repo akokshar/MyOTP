@@ -229,7 +229,7 @@ struct TokenView: View {
     private let onDelete: () -> Void
     private let onPick: () -> Void
 
-    @State var offset = CGSize.zero
+    @State var offset: CGSize = .zero
 
     init(token: Token, onEdit: @escaping ()->Void = {}, onDelete:  @escaping ()->Void = {}, onPick: @escaping ()->Void = {}) {
         self.onEdit = onEdit
@@ -262,21 +262,29 @@ struct TokenView: View {
                         onPick()
                     },
                     label: {
-                        VStack(alignment: .leading) {
-                            Text(token.tokenData.issuer)
-                                .font(.headline)
-                                .foregroundColor(.primary)
-                            Text(token.tokenData.account)
-                                .font(.footnote)
-                                .allowsTightening(true)
-    //                            .multilineTextAlignment(.leading)
-                                .truncationMode(.middle)
-//                            HStack {
-                            ProgressView(value: token.tokenAge())
-                                .frame(minHeight: 5, idealHeight: 8, maxHeight: 8)
-//                                .scaledToFill()
-//                                .frame(height: 8)
-//                            }
+                        GeometryReader { button in
+                            VStack(alignment: .leading) {
+                                Text(token.tokenData.issuer)
+                                    .font(.headline)
+                                    .foregroundColor(.primary)
+                                Text(token.tokenData.account)
+                                    .font(.footnote)
+                                    .allowsTightening(true)
+        //                            .multilineTextAlignment(.leading)
+                                    .truncationMode(.middle)
+                                ZStack(alignment: .leading) {
+                                    RoundedRectangle(cornerRadius: 3)
+                                        .fill(Color.secondary)
+                                        .frame(width: button.size.width, height: 3)
+                                    RoundedRectangle(cornerRadius: 3)
+                                        .fill(
+                                            1.0 - token.tokenAge() < 0.2
+                                                ? Color.red
+                                                : Color.primary
+                                        )
+                                        .frame(width: button.size.width * CGFloat(1.0 - token.tokenAge()), height: 3)
+                                }
+                            }
                         }
                     }
                 )
@@ -325,7 +333,7 @@ struct TokenButtonStyle: ButtonStyle {
             configuration.label
                 .padding(10)
         }
-//        .scaleEffect(configuration.isPressed ? 0.95 : 1)
+        .scaleEffect(configuration.isPressed ? 0.95 : 1)
         .overlay(
             RoundedRectangle(cornerRadius: 8, style: .continuous)
                 .strokeBorder(isHovering ? Color.primary : Color.secondary, lineWidth: 0.27)
