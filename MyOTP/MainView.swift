@@ -15,7 +15,7 @@ struct MainView: View {
     private let tokenButtonHeight: CGFloat = 64
 
     @State private var timer: Timer? = nil
-    @State private var currentTime: Int64 = Int64(Date().timeIntervalSince1970)
+//    @State private var currentTime: Int64 = Int64(Date().timeIntervalSince1970)
 
     @State private var changedTokenId: UUID?
 
@@ -56,7 +56,7 @@ struct MainView: View {
                 Text("MyOTP")
                     .font(.title)
                     .fontWeight(.bold)
-                    .foregroundColor(Color.white)
+                    .foregroundColor(Color.primary)
                 Spacer()
                 Button(
                     action: {
@@ -85,7 +85,6 @@ struct MainView: View {
             .frame(height: headerHeight, alignment: .center)
 
             // Tokens list
-
             ScrollViewReader { (proxy: ScrollViewProxy) in
                 List {
                     ForEach(tokens.items) { token in
@@ -204,7 +203,7 @@ struct MainView: View {
 //        print("Start")
         self.timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true){ _ in
             tokens.touch()
-            currentTime = Int64(Date().timeIntervalSince1970)
+//            currentTime = Int64(Date().timeIntervalSince1970)
 //            print(self.currentTime)
         }
     }
@@ -376,13 +375,13 @@ struct MainView_Previews: PreviewProvider {
                 Token("iCloud @ Personal", "myself@icloud.com")
             ]))
             .previewLayout(.sizeThatFits)
-            .frame(width: 350, height: 284, alignment: .center)
+            .frame(width: 350, height: 280, alignment: .center)
     }
 }
 
 struct TokenView_Previews: PreviewProvider {
     static var previews: some View {
         TokenView(token: Token("Issuer", "Account"))
-            .frame(width: 300, height: 82)
+            .frame(width: 300, height: 64)
     }
 }

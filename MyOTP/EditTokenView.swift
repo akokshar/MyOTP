@@ -8,11 +8,18 @@
 import SwiftUI
 import UniformTypeIdentifiers.UTType
 
+extension NSTextField {
+    open override var focusRingType: NSFocusRingType {
+        get { .none }
+        set { }
+    }
+}
+
 struct EditTokenView: View {
     @EnvironmentObject var tokens: Tokens
     @ObservedObject var token: Token
 
-    @State var selectedTab = 1
+    @State var selectedTab = 2
     @State var isTargeted = false
     @State var isSecretVisible = false
 
@@ -84,36 +91,64 @@ struct EditTokenView: View {
                 }
                 .tag(1)
                 VStack(alignment: .leading) {
-                    Text("Issuer:")
-                        .font(.callout)
-                    TextField("Issuer...", text: $token.tokenData.issuer)
-                    Text("Associated account:")
-                        .font(.callout)
-                    TextField("Account name...", text: $token.tokenData.account)
-                    Text("Secret:")
-                            .font(.callout)
-                    HStack {
-                        if isSecretVisible {
-                            TextField("Secret...", text: $token.tokenData.secret)
-                        } else {
-                            SecureField("Secret...", text: $token.tokenData.secret)
+                    Section {
+                        VStack(alignment: .leading) {
+                            Text("Issuer:")
+                                .font(.headline)
+                            TextField("issuer name", text: $token.tokenData.issuer)
+                                .textFieldStyle(PlainTextFieldStyle())
+                                .font(.body)
                         }
-                        Button(
-                            action: {
-                                isSecretVisible.toggle()
-                            },
-                            label: {
-                                Image(systemName: self.isSecretVisible ? "eye.slash" : "eye")
-//                                    .accentColor(.gray)
-                            }
-                        )
+                        .padding(5)
+                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray, lineWidth: 1))
                     }
+                    Section {
+                        VStack(alignment: .leading) {
+                            Text("Account:")
+                                .font(.headline)
+                            TextField("account name", text: $token.tokenData.account)
+                                .textFieldStyle(PlainTextFieldStyle())
+                                .font(.body)
+                        }
+                        .padding(5)
+                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray, lineWidth: 1))
+                    }
+                    Section {
+                        VStack(alignment: .leading) {
+                            Text("Secret:")
+                                .font(.headline)
+                            HStack {
+                                if isSecretVisible {
+                                    TextField("secret", text: $token.tokenData.secret)
+                                        .textFieldStyle(PlainTextFieldStyle())
+                                        .font(.body)
+                                } else {
+                                    SecureField("secret", text: $token.tokenData.secret)
+                                        .textFieldStyle(PlainTextFieldStyle())
+                                        .font(.body)
+                                }
+                                Button(
+                                    action: {
+                                        isSecretVisible.toggle()
+                                    },
+                                    label: {
+                                        Image(systemName: self.isSecretVisible ? "eye.slash" : "eye")
+                                    }
+                                )
+                                .buttonStyle(PlainButtonStyle())
+                            }
+                        }
+                        .padding(5)
+                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray, lineWidth: 1))
+                    }
+
                     HStack {
                         Picker("Algorithm:", selection: $token.tokenData.alg) {
                             Text("SHA1").tag(Algorithm.SHA1.rawValue)
                             Text("SHA256").tag(Algorithm.SHA256.rawValue)
                             Text("SHA512").tag(Algorithm.SHA512.rawValue)
                         }
+                        .pickerStyle(SegmentedPickerStyle())
                         Stepper("Time interval: \(token.tokenData.period)", value: $token.tokenData.period, in: 30...60)
                         Spacer()
                         Stepper("Digits: \(token.tokenData.digits)", value: $token.tokenData.digits, in: 6...8)
@@ -155,7 +190,7 @@ struct EditTokenView: View {
         )
         .padding()
         .background(Color(.windowBackgroundColor).opacity(0.95))
-        .frame(width: 450, height: 300, alignment: .center)
+        .frame(width: 500, height: 350, alignment: .center)
 //        .animation(Animation.easeInOut(duration:0.2))
     }
 }
@@ -164,6 +199,6 @@ struct EditTokenView_Previews: PreviewProvider {
     static var previews: some View {
         EditTokenView(token: Token("New token", "user@example.com"))
             .previewLayout(.sizeThatFits)
-            .frame(width: 400, height: 350, alignment: .center)
+            .frame(width: 520, height: 400, alignment: .center)
     }
 }
