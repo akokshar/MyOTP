@@ -19,7 +19,7 @@ struct EditTokenView: View {
     @EnvironmentObject var tokens: Tokens
     @ObservedObject var token: Token
 
-    @State var selectedTab = 2
+    @State var selectedTab = 1
     @State var isTargeted = false
     @State var isSecretVisible = false
 
