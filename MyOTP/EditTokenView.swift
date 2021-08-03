@@ -141,24 +141,32 @@ struct EditTokenView: View {
                         .padding(5)
                         .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray, lineWidth: 1))
                     }
-
-                    HStack {
-                        Picker("Algorithm:", selection: $token.tokenData.alg) {
-                            Text("SHA1").tag(Algorithm.SHA1.rawValue)
-                            Text("SHA256").tag(Algorithm.SHA256.rawValue)
-                            Text("SHA512").tag(Algorithm.SHA512.rawValue)
+                    Section {
+                        VStack(alignment: .leading) {
+                            Text("Options:")
+                                .font(.headline)
+                            HStack {
+                                Picker("Algorithm:", selection: $token.tokenData.alg) {
+                                    Text("SHA1").tag(Algorithm.SHA1.rawValue)
+                                    Text("SHA256").tag(Algorithm.SHA256.rawValue)
+                                    Text("SHA512").tag(Algorithm.SHA512.rawValue)
+                                }
+                                .pickerStyle(SegmentedPickerStyle())
+                                Spacer()
+                                Stepper("Time interval: \(token.tokenData.period)", value: $token.tokenData.period, in: 30...60)
+                                Spacer()
+                                Stepper("Digits: \(token.tokenData.digits)", value: $token.tokenData.digits, in: 6...8)
+                            }
                         }
-                        .pickerStyle(SegmentedPickerStyle())
-                        Stepper("Time interval: \(token.tokenData.period)", value: $token.tokenData.period, in: 30...60)
-                        Spacer()
-                        Stepper("Digits: \(token.tokenData.digits)", value: $token.tokenData.digits, in: 6...8)
-                        Spacer()
+                        .padding(5)
+                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray, lineWidth: 1))
                     }
                 }
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .tabItem {
                     Text("Manual")
                 }
+                .padding(5)
                 .tag(2)
             }
 //            .focusable(false)
