@@ -15,7 +15,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSDragging
     private var statusBarItem: NSStatusItem!
     private var observation : NSKeyValueObservation?
     private var localMonitor: Any?
-//    private var globalMonitor: Any?
+    private var globalMonitor: Any?
 //    private var dragMonitor: Any?
     private var mainWindow: NSWindow!
     private var keepOnTop: Bool = false
@@ -136,23 +136,23 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSDragging
         mainWindow.makeKeyAndOrderFront(nil)
 
         statusBarItem.button?.isHighlighted = true
-//        if globalMonitor == nil {
-//            globalMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseDown, .rightMouseDown, .otherMouseDown]) { event in
-//                if event.window != self.statusBarItem.button?.window && event.window != self.mainWindow {
-//                    self.hideMainWindow()
-//                }
-//            }
-//        }
+        if globalMonitor == nil {
+            globalMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseDown, .rightMouseDown, .otherMouseDown]) { event in
+                if event.window != self.statusBarItem.button?.window && event.window != self.mainWindow {
+                    self.hideMainWindow()
+                }
+            }
+        }
     }
 
     open func hideMainWindow() {
         if keepOnTop {
             return
         }
-//        if let monitor = globalMonitor {
-//            NSEvent.removeMonitor(monitor)
-//            globalMonitor = nil
-//        }
+        if let monitor = globalMonitor {
+            NSEvent.removeMonitor(monitor)
+            globalMonitor = nil
+        }
         NSApp.deactivate()
 
         mainWindow.contentView = nil
