@@ -9,7 +9,7 @@ import Cocoa
 import SwiftUI
 import UniformTypeIdentifiers.UTType
 
-class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSDraggingDestination, NSMenuDelegate {
+class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSDraggingDestination {
     private let tokens: Tokens = Tokens()
 
     private var statusBarItem: NSStatusItem!
@@ -47,20 +47,19 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSDragging
         statusBarItem.button?.window?.delegate = self;
 
         mainWindow = NSWindow()
-        mainWindow.styleMask = [ .borderless ]
-        mainWindow.level = .floating
+        mainWindow.styleMask = [ .fullSizeContentView ]
+        mainWindow.level = .statusBar
         mainWindow.backgroundColor = .clear
-        mainWindow.isOpaque = true
+        mainWindow.isOpaque = false
         mainWindow.isReleasedWhenClosed = false
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
+        hideMainWindow()
         if let monitor = localMonitor {
             NSEvent.removeMonitor(monitor)
             localMonitor = nil
         }
-
-        hideMainWindow()
     }
 
     func applicationDidResignActive(_ notification: Notification) {
